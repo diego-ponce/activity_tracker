@@ -9,3 +9,7 @@ body {
     background-color: #f5f5f5;
     padding: 1.5rem;
 }
+form  { display: table;      }
+p     { display: table-row;  }
+label { display: table-cell; }
+input { display: table-cell; }

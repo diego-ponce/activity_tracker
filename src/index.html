@@ -9,16 +9,37 @@
     <a href="about.html">About</a>
     <br><br>
     <h1 id="title">Hello</h1>
-    <br><br>
-    <label for="noteTitle">Title</label>
-    <input id="noteTitle" type="text" />
-    <br>
-    <label for="noteContent">Content</label>
-    <input id="noteContent" type="text" />
-    <br>
-    <label for="noteFeeling">Feeling</label>
-    <input id="noteFeeling" type="text" />
-    <button id="noteSubmit">Submit Note</button>
+    <form>
+        <p>
+            <label for="noteTitle">Title</label>
+            <input id="noteTitle" type="text" />
+        </p>
+        <p>
+            <label for="noteContent">Content</label>
+            <input id="noteContent" type="text" />
+        </p>
+        <p>
+            <label for="noteFeeling">Feeling</label>
+            <input id="noteFeeling" type="text" />
+        </p>
+        <p>
+            <label for="impact">Impact</label>
+            <input type="range" id="noteImpact" name="impact" min="0" max="11" />
+        </p>
+        <p>
+            <label for="productivity">Productivity</label>
+            <input type="range" id="noteProductivity" name="productivity" min="0" max="11" />
+        </p>
+        <p>
+            <label for="helpfulness">Helpfulness</label>
+            <input type="range" id="noteHelpfulness" name="helpfulness" min="0" max="11" />
+        </p>
+        <p>
+            <label for="remind_time">Reminds me in (minutes)</label>
+            <input type="number" id="noteRemind_time" name="remind_time" min="1" max="60" placeholder="15">
+        </p>
+        <button id="noteSubmit">Submit Note</button>
+    </form>
     <script src="script.js"></script>
 </body>
 </html>
