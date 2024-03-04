@@ -5,7 +5,11 @@ const { getPreferences, setPreferences  } = require('./settings.js')
 const { getValues } = require('./initial_values.js');
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const isDev = !app.isPackaged;
+const os = require ('os');
+const username = os.userInfo ().username;
+
 function createWindow ()  {
+    ipcMain.handle('getUsername', () => username);
     ipcMain.handle('getInitialValues', () => getValues());
     const preferences = getPreferences ();
     const window = new BrowserWindow({
@@ -21,9 +25,9 @@ function createWindow ()  {
         // TODO figure out how to do with local file
         // if (!validateSender(req.senderFrame)) return false;
         if (!data || !data.content) return false;
-        const filePath = path.join(__dirname, 'notes', data.content.timestamp + '.json');
+        const filePath = path.join(__dirname,'notes','notes.jsonl');
         let content = JSON.stringify(data.content, null); 
-        fs.writeFile(filePath, content, function (err) {
+        fs.appendFile(filePath, content, function (err) {
             if (err) throw err;
             console.log('wrote data to ' + filePath);
         }); 

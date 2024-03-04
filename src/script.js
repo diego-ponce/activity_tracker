@@ -22,7 +22,9 @@ api.getInitialValues().then(result => {
 note_submit_el.addEventListener('click', async () => {
     d = new Date
     const title = note_title_el.value.trim()
+    const username = await api.getUsername()
     let content = {
+        username: username,
         timestamp: d.toISOString(),
         title: title,
         content: note_content_el.value.trim(),
