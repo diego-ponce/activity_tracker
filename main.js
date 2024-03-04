@@ -9,6 +9,18 @@ const os = require ('os');
 const username = os.userInfo ().username;
 let converter = require('json-2-csv');
 
+function getAllNotes () {
+        try {
+            const filePath = path.join(__dirname, 'notes', 'notes.jsonl');
+            const data = fs.readFileSync(filePath, 'utf-8')
+            return data
+        }
+        catch {
+            console.log("failed to read file");
+            return;
+        }
+}
+
 function createWindow ()  {
     ipcMain.handle('getUsername', () => username);
     ipcMain.handle('getInitialValues', () => getValues());
@@ -23,8 +35,8 @@ function createWindow ()  {
         }
     });
     ipcMain.handle('export-csv', async (req) => {
-        const filePath = path.join(__dirname, 'notes', 'notes.jsonl');
-        const data= fs.readFileSync(filePath, 'utf-8');
+        data = getAllNotes();
+        if (!data) return;
         const lines = data.trim().split(/\n/).map( obj => JSON.parse(obj) );
         const csv = converter.json2csv(lines); 
         const csvPath = path.join(__dirname,'notes.csv');
@@ -70,6 +82,8 @@ function createWindow ()  {
     if (isDev) window.webContents.openDevTools();
 }
 app.whenReady().then(() => {
+    const notesPath = path.join(__dirname, 'notes');
+    fs.mkdirSync(notesPath, { recursive: true });
     createWindow()
 });
 app.on('window-all-closed', () => {

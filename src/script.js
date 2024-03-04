@@ -21,7 +21,6 @@ api.getInitialValues().then(result => {
     }
 })
 note_export_to_csv_el.addEventListener('click', async () => {
-    console.log("hello")
     const res = await api.exportCsv()
 })
 note_submit_el.addEventListener('click', async () => {
