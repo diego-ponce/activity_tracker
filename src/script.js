@@ -9,14 +9,16 @@ const note_helpfulness_el = document.getElementById('noteHelpfulness');
 const note_remind_time_el = document.getElementById('noteRemind_time');
 const note_submit_el = document.getElementById('noteSubmit');
 
-const initialValues = api.initialValues;
-for (element in initialValues) {
-    // TODO clean this up 
-    const elHack = 'note' + element.charAt(0).toUpperCase() + element.substring(1)
-    console.log(elHack)
-    el = document.getElementById(elHack);
-    if (el) el.value = initialValues[element];
-}
+api.getInitialValues().then(result => {
+    const initialValues = JSON.parse(result);
+    for (element in initialValues) {
+        // TODO clean this up 
+        const elHack = 'note' + element.charAt(0).toUpperCase() + element.substring(1)
+        el = document.getElementById(elHack);
+        if (el) el.value = initialValues[element];
+    }
+})
+
 note_submit_el.addEventListener('click', async () => {
     d = new Date
     const title = note_title_el.value.trim()
@@ -35,7 +37,4 @@ note_submit_el.addEventListener('click', async () => {
         content, 
     })
     console.log(res);
-    console.log(content.timestamp);
-    note_title_el.value = "";
-    note_content_el.value = "";
 })
