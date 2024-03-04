@@ -2,10 +2,10 @@ const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const { getPreferences, setPreferences  } = require('./settings.js')
-
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const isDev = !app.isPackaged;
 function createWindow ()  {
     const preferences = getPreferences ();
-
     const window = new BrowserWindow({
         x: preferences["win-pos"][0],
         y: preferences["win-pos"][1],
@@ -16,11 +16,11 @@ function createWindow ()  {
             sandbox: false
         }
     });
-    console.log(window.getPosition())
-    ipcMain.handle('create-file', (req, data) => {
+    ipcMain.handle('create-file', async (req, data) => {
+        if (!validateSender(req.senderFrame)) return null
         if (!data || !data.content) return false;
         const filePath = path.join(__dirname, 'notes', data.content.timestamp + '.json');
-        let content = JSON.stringify(data.content, null, 2); 
+        let content = JSON.stringify(data.content, null); 
         fs.writeFile(filePath, content, function (err) {
             if (err) throw err;
             console.log('wrote data to ' + filePath);
@@ -30,7 +30,11 @@ function createWindow ()  {
             if (err) throw err;
             console.log('wrote data to ' + configPath);
         }); 
-        app.quit()
+        window.hide();
+        remind_time = data.content.remind_time * 1000 * 60;
+        await sleep(remind_time);
+        console.log('waiting for ' + remind_time)
+        window.show();
         return { success: true, filepath: filePath };
     })
     const preferenceEvents = ['resized','moved', 'close'];
@@ -38,7 +42,7 @@ function createWindow ()  {
         window.on(event, () => {setPreferences(preferences, window)});
     });
     window.loadFile('src/index.html');
-    // window.webContents.openDevTools();
+    if (isDev) window.webContents.openDevTools();
 }
 app.whenReady().then(createWindow);
 app.on('window-all-closed', () => {
