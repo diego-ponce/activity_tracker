@@ -1,3 +1,4 @@
+
 const title_el = document.getElementById('title');
 title_el.innerText = api.title;
 const note_title_el = document.getElementById('noteTitle');
@@ -8,6 +9,7 @@ const note_productivity_el = document.getElementById('noteProductivity');
 const note_helpfulness_el = document.getElementById('noteHelpfulness');
 const note_remind_time_el = document.getElementById('noteRemind_time');
 const note_submit_el = document.getElementById('noteSubmit');
+const note_export_to_csv_el = document.getElementById('noteExportCSV');
 
 api.getInitialValues().then(result => {
     const initialValues = JSON.parse(result);
@@ -18,7 +20,10 @@ api.getInitialValues().then(result => {
         if (el) el.value = initialValues[element];
     }
 })
-
+note_export_to_csv_el.addEventListener('click', async () => {
+    console.log("hello")
+    const res = await api.exportCsv()
+})
 note_submit_el.addEventListener('click', async () => {
     d = new Date
     const title = note_title_el.value.trim()

@@ -7,6 +7,7 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
 const isDev = !app.isPackaged;
 const os = require ('os');
 const username = os.userInfo ().username;
+let converter = require('json-2-csv');
 
 function createWindow ()  {
     ipcMain.handle('getUsername', () => username);
@@ -21,12 +22,25 @@ function createWindow ()  {
             preload: path.join(__dirname, 'preload.js')
         }
     });
+    ipcMain.handle('export-csv', async (req) => {
+        const filePath = path.join(__dirname, 'notes', 'notes.jsonl');
+        const data= fs.readFileSync(filePath, 'utf-8');
+        const lines = data.trim().split(/\n/).map( obj => JSON.parse(obj) );
+        const csv = converter.json2csv(lines); 
+        const csvPath = path.join(__dirname,'notes.csv');
+        fs.writeFile(csvPath, csv, function (err) {
+            if (err) throw err;
+            console.log('wrote data to ' + csvPath);
+
+        });
+    });
     ipcMain.handle('create-file', async (req, data) => {
         // TODO figure out how to do with local file
         // if (!validateSender(req.senderFrame)) return false;
         if (!data || !data.content) return false;
         const filePath = path.join(__dirname,'notes','notes.jsonl');
         let content = JSON.stringify(data.content, null); 
+        content += "\n";
         fs.appendFile(filePath, content, function (err) {
             if (err) throw err;
             console.log('wrote data to ' + filePath);
