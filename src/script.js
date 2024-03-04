@@ -9,32 +9,33 @@ const note_helpfulness_el = document.getElementById('noteHelpfulness');
 const note_remind_time_el = document.getElementById('noteRemind_time');
 const note_submit_el = document.getElementById('noteSubmit');
 
+const initialValues = api.initialValues;
+for (element in initialValues) {
+    // TODO clean this up 
+    const elHack = 'note' + element.charAt(0).toUpperCase() + element.substring(1)
+    console.log(elHack)
+    el = document.getElementById(elHack);
+    if (el) el.value = initialValues[element];
+}
 note_submit_el.addEventListener('click', async () => {
     d = new Date
-    const timestamp = d.toISOString();
-    const title = note_title_el.value.trim();
-    const content_text = note_content_el.value.trim();
-    const feeling = note_feeling_el.value.trim();
-    const impact = note_impact_el.value;
-    const productivity = note_productivity_el.value;
-    const helpfulness = note_helpfulness_el.value;
-    const row = [timestamp, title, content_text, feeling, impact, productivity, helpfulness,'\n']
-    const content = row.map(item => (typeof item === 'string' && item.indexOf(',') >= 0) ? `"${item}"`: String(item)).join(',');
-
-
-    console.log(content)
-
+    const title = note_title_el.value.trim()
+    let content = {
+        timestamp: d.toISOString(),
+        title: title,
+        content: note_content_el.value.trim(),
+        feeling: note_feeling_el.value.trim(),
+        impact: note_impact_el.value,
+        productivity: note_productivity_el.value,
+        helpfulness: note_helpfulness_el.value,
+        remind_time: note_remind_time_el.value
+    };
     const res = await api.createNote({
         title,
         content, 
     })
-
     console.log(res);
-    console.log(timestamp);
+    console.log(content.timestamp);
     note_title_el.value = "";
     note_content_el.value = "";
-    
-
-
-    
 })
