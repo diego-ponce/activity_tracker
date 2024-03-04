@@ -1,7 +1,8 @@
 
 const title_el = document.getElementById('title');
 title_el.innerText = api.title;
-const note_title_el = document.getElementById('noteTitle');
+const title = api.title;
+const note_project_el = document.getElementById('noteProject');
 const note_content_el = document.getElementById('noteContent');
 const note_feeling_el = document.getElementById('noteFeeling');
 const note_impact_el = document.getElementById('noteImpact');
@@ -25,12 +26,11 @@ note_export_to_csv_el.addEventListener('click', async () => {
 })
 note_submit_el.addEventListener('click', async () => {
     d = new Date
-    const title = note_title_el.value.trim()
     const username = await api.getUsername()
     let content = {
         username: username,
         timestamp: d.toISOString(),
-        title: title,
+        project: note_project_el.value.trim(),
         content: note_content_el.value.trim(),
         feeling: note_feeling_el.value.trim(),
         impact: note_impact_el.value,
