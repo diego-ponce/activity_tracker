@@ -78,7 +78,7 @@ function createWindow ()  {
         window.on(event, () => {setPreferences(window)});
     });
     window.loadFile('src/index.html');
-    if (process.env.ELECTRON_DEBUG) window.webContents.openDevTools();
+    if (process.env.ELECTRON_DEBUG==='1') window.webContents.openDevTools();
 }
 app.whenReady().then(() => {
     const notesPath = path.join(__dirname, 'notes');
