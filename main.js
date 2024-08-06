@@ -4,7 +4,6 @@ const fs = require('fs');
 const { getPreferences, setPreferences  } = require('./settings.js')
 const { getValues } = require('./initial_values.js');
 const sleep = ms => new Promise(r => setTimeout(r, ms));
-const isDev = !app.isPackaged;
 const os = require ('os');
 const username = os.userInfo ().username;
 let converter = require('json-2-csv');
@@ -79,7 +78,7 @@ function createWindow ()  {
         window.on(event, () => {setPreferences(window)});
     });
     window.loadFile('src/index.html');
-    if (isDev) window.webContents.openDevTools();
+    if (process.env.ELECTRON_DEBUG) window.webContents.openDevTools();
 }
 app.whenReady().then(() => {
     const notesPath = path.join(__dirname, 'notes');
