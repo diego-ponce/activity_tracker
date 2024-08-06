@@ -10,6 +10,7 @@ Sometimes I want a detailed view on what I did in a day
 * cd into the clone
 * `npm install` to install dependencies
 * `npm start` to start the app
+* `export ELECTRON_DEBUG=1` to start developer window with app
 
 
 ## What does it do?
